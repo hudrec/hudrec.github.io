@@ -1,0 +1,30 @@
+---
+const pathname = new URL(Astro.request.url).pathname;
+const currentPath = pathname.slice(1); // remove the first "/"
+---
+
+<header class="mx-auto max-w-screen-lg py-6 px-3 flex">
+  <div class="flex flex-grow basis-0">LOGO</div>
+  <nav class="flex [&>a]:font-bold [&>a]:inline-block [&>a]:px-4 [&>a]:py-2">
+    <a class="text-[#8cb9ed] hover:text-white" href="www.github.com/hudrec"
+      >Github</a
+    >
+    <a
+      class="text-[#8cb9ed] hover:text-white"
+      href="https://www.linkedin.com/in/hugo-del-solar-9398086a/">Linkedin</a
+    >
+    <!-- <a class={currentPath === "posts" ? "active" : "" + "text-[#8cb9ed]"} href="/posts">Article</a>
+			<a class={currentPath === "about" ? "active" : "" + "text-[#8cb9ed]"} href="/about">About Me</a>
+			<a class={currentPath === "contact" ? "active" : "" + "text-[#8cb9ed]"} href="/contact">Contact Me</a> -->
+  </nav>
+  <nav class="flex">
+    <a href=""></a>
+    <a href=""></a>
+    <a href=""></a>
+  </nav>
+</header>
+<style>
+  .active {
+    color: #fff;
+  }
+</style>
