@@ -1,5 +1,6 @@
 ---
-import Logo from "../../public/assets/images/avatar.svg?raw";
+import { Image } from 'astro:assets';
+import Logo from "/public/assets/images/avatar.jpg";
 ---
 
 <div
@@ -67,7 +68,7 @@ import Logo from "../../public/assets/images/avatar.svg?raw";
       </li>
     </ul>
   </div>
-  <div class="shrink-0 pb-4">
-    <Fragment set:html={Logo} />
+  <div class="shrink-0 pb-4 w-96 h-96">
+    <Image src={Logo} alt="Hugo del Solar" class="rounded-full" />
   </div>
 </div>
