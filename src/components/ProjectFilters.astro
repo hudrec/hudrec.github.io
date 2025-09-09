@@ -1,0 +1,66 @@
+---
+// This component handles the project filtering functionality
+---
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const filterButtons = document.querySelectorAll('[data-filter]');
+    const projectItems = document.querySelectorAll('[data-technologies]');
+
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        // Update active state
+        filterButtons.forEach(btn => {
+          btn.classList.remove('ring-2', 'ring-cyan-500', 'ring-offset-2', 'ring-offset-slate-900');
+          btn.classList.add('opacity-90');
+        });
+        
+        button.classList.add('ring-2', 'ring-cyan-500', 'ring-offset-2', 'ring-offset-slate-900');
+        button.classList.remove('opacity-90');
+
+        const filterValue = button.getAttribute('data-filter');
+        
+        // Filter projects
+        projectItems.forEach(project => {
+          const technologies = project.getAttribute('data-technologies').split(' ');
+          
+          if (filterValue === 'all' || technologies.includes(filterValue)) {
+            project.style.display = 'block';
+            // Add animation
+            project.style.animation = 'fadeIn 0.5s ease-in-out';
+          } else {
+            project.style.animation = 'fadeOut 0.3s ease-in-out';
+            // Wait for animation to complete before hiding
+            setTimeout(() => {
+              project.style.display = 'none';
+            }, 250);
+          }
+        });
+      });
+    });
+  });
+</script>
+
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes fadeOut {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(-10px); }
+  }
+  
+  [data-filter] {
+    transition: all 0.2s ease-in-out;
+  }
+  
+  [data-filter]:hover {
+    transform: translateY(-2px);
+  }
+  
+  [data-filter].active {
+    transform: scale(1.05);
+  }
+</style>
