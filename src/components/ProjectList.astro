@@ -1,18 +1,9 @@
 ---
 import { getCollection } from "astro:content"
-import { COLORS } from "../constans"
-import ProjectFilters from "./ProjectFilters.astro";
  
 const projects = await getCollection('projects')
 const sortedProjects = projects.sort((a, b) => a.data.sortOrder - b.data.sortOrder)
-
-// Get unique technologies for filtering
-const allTechnologies = Array.from(
-  new Set(projects.flatMap(p => p.data.technologies || []))
-);
 ---
-
-<ProjectFilters client:load />
 
 <section id="projects" class="py-16 bg-slate-900/50 backdrop-blur-sm">
   <div class="container mx-auto px-4">
@@ -26,86 +17,37 @@ const allTechnologies = Array.from(
       </p>
     </div>
 
-    <!-- Technology Filter -->
-    <div class="flex flex-wrap justify-center gap-2 mb-8">
-      <button 
-        class="px-4 py-2 rounded-full text-sm font-medium bg-cyan-500/10 text-cyan-400 hover:bg-cyan-500/20 transition-colors ring-2 ring-cyan-500 ring-offset-2 ring-offset-slate-900"
-        data-filter="all">
-        All
-      </button>
-      {
-        allTechnologies.map(tech => {
-          const bgColor = COLORS[tech]?.[0] || 'bg-slate-700';
-          const textColor = COLORS[tech]?.[1] || 'text-white';
-          return (
-            <button 
-              class={`px-4 py-2 rounded-full text-sm font-medium ${bgColor} ${textColor} opacity-90 hover:opacity-100 transition-opacity`}
-              data-filter={tech.toLowerCase()}>
-              {tech}
-            </button>
-          )
-        })
-      }
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {
-        sortedProjects.map((project) => { 
-          const { slug, data } = project;
-          const { company, name, company_url, img, description, technologies, github_url } = data;
-          
-          return (
-            <div 
-              class="group relative overflow-hidden rounded-xl bg-slate-800/50 border border-slate-700/50 hover:border-cyan-500/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-cyan-500/10 flex flex-col h-full"
-              data-technologies={technologies?.map(t => t.toLowerCase()).join(' ')}
-            >
-              {/* Image Container */}
-              <div class="relative h-48 overflow-hidden bg-slate-800">
-                <img 
-                  src={img} 
-                  alt={name}
-                  class="w-full h-full object-contain p-4"
-                  loading="lazy"
-                />
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
-                  <div class="flex flex-wrap gap-2">
-                    {data.technologies && data.technologies.map(tech => (
-                      <span class="text-xs px-2 py-1 bg-slate-800/90 text-slate-300 rounded">
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-              
-              <div class="p-6 flex flex-col flex-grow">
-                <h3 class="text-xl font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors">
-                  {name}
-                </h3>
-                <p class="text-slate-400 text-sm mb-4">{company}</p>
-                <p class="text-slate-300 mb-4">{description}</p>
-                
-                {/* Project Details */}
-                <div class="space-y-3 mb-6">
-                  {data.role && (
-                    <div class="flex items-start">
-                      <span class="text-slate-400 text-sm w-20 flex-shrink-0">Role:</span>
-                      <span class="text-slate-300 text-sm">{data.role}</span>
-                    </div>
-                  )}
-                  
-                  {data.duration && (
-                    <div class="flex items-start">
-                      <span class="text-slate-400 text-sm w-20 flex-shrink-0">When:</span>
-                      <span class="text-slate-300 text-sm">{data.duration}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {sortedProjects.map(project => (
+        <div class="bg-slate-800/50 rounded-xl p-6 hover:bg-slate-700/50 transition-colors">
+          <div class="flex items-center mb-4">
+            {project.data.img && (
+              <img 
+                src={project.data.img} 
+                alt={project.data.name}
+                class="w-12 h-12 object-contain mr-4"
+                loading="lazy"
+              />
+            )}
+            <div>
+              <h3 class="text-xl font-bold text-white">{project.data.name}</h3>
+              {project.data.company && (
+                <p class="text-sm text-slate-400">{project.data.company}</p>
+              )}
             </div>
-          )
-        })
-      }
+          </div>
+          
+          <p class="text-slate-300 mb-4">{project.data.description}</p>
+          
+          <div class="flex flex-wrap gap-2 mt-4">
+            {project.data.technologies?.map(tech => (
+              <span class="px-2 py-1 text-xs rounded bg-cyan-500/10 text-cyan-400">
+                {tech}
+              </span>
+            ))}
+          </div>
+        </div>
+      ))}
     </div>
   </div>
-</div>
+</section>
